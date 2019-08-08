@@ -5,7 +5,7 @@ import numpy as np
 if __name__ == '__main__':
 
 result = []
-for lot in range(1,270000):
+for lot in range(1, 270000):
     infile = "/Users/alehe/OneDrive/Documents/Jupyter/SharpestMinds/Parcels/parcel{}".format(lot)
     with open(infile, 'r') as infile:
         try:
