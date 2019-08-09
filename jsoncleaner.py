@@ -1,6 +1,7 @@
 import json
 import pandas as pd
 import numpy as np
+
 if __name__ == '__main__':
 
     df = pd.read_csv('merged.csv', index_col=None)
@@ -32,9 +33,9 @@ if __name__ == '__main__':
     # Need to convert this to numeric. Split-level = 1.5, 1.75 story= 1.5
     df['Story Height Custom'] = df['Story Height'].astype(str).map(lambda x: x.replace(
         'STY', '').replace('STORY', '').replace(' ', '').replace('TWO', '2').replace('ONE', '1'))
-    df['Story Height Custom'] = df['Story Height Improved'].map(lambda x: x.replace(
+    df['Story Height Custom'] = df['Story Height Custom'].map(lambda x: x.replace(
         'THREE', '3').replace('SPLIT-LEVEL', '1.5').replace('BI-LEVEL', '2')).replace('1.75', '1.5')
-    df['Story Height Custom'] = df['Story Height Improved'].map(lambda x: float(x))
+    df['Story Height Custom'] = df['Story Height Custom'].map(lambda x: float(x))
 
     # All apartments and multifamily I am listing as "condo"
     df['Building Type Custom'] = df['Building Type'].replace('HIGHRISE APT', 'CONDO').replace(
