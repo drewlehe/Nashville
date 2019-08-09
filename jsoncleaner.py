@@ -32,25 +32,26 @@ df['Land Area Acres'] = df['Land Area'].map(lambda x: x.replace(
 df.Neighborhood = df.Neighborhood.map(lambda x: str(x))
 
 # Need to convert this to numeric. Split-level = 1.5, 1.75 story= 1.5
-df['Story Height Improved'] = df['Story Height'].astype(str).map(lambda x: x.replace(
+df['Story Height Custom'] = df['Story Height'].astype(str).map(lambda x: x.replace(
     'STY', '').replace('STORY', '').replace(' ', '').replace('TWO', '2').replace('ONE', '1'))
-df['Story Height Improved'] = df['Story Height Improved'].map(lambda x: x.replace(
+df['Story Height Custom'] = df['Story Height Improved'].map(lambda x: x.replace(
     'THREE', '3').replace('SPLIT-LEVEL', '1.5').replace('BI-LEVEL', '2')).replace('1.75', '1.5')
-df['Story Height Improved'] = df['Story Height Improved'].map(lambda x: float(x))
+df['Story Height Custom'] = df['Story Height Improved'].map(lambda x: float(x))
 
 # All apartments and multifamily I am listing as "condo"
-df['Building Type'] = df['Building Type'].replace('HIGHRISE APT', 'CONDO').replace(
+df['Building Type Custom'] = df['Building Type'].replace('HIGHRISE APT', 'CONDO').replace(
     'APARTMENT', 'CONDO').replace('HRISE CONDO', 'CONDO').replace('RESD CONDO', 'CONDO')
 # Combining single-family residential
-df['Building Type'] = df['Building Type'].replace('RW SING FAM', 'SINGLE FAM').replace('RZ SING FAM', 'SINGLE FAM').replace(
+df['Building Type Custom'] = df['Building Type'].replace('RW SING FAM', 'SINGLE FAM').replace('RZ SING FAM', 'SINGLE FAM').replace(
     'RH SING FAM', 'SINGLE FAM').replace('RY SING FAM', 'SINGLE FAM').replace('MODULAR HOME', 'SINGLE FAM').replace('SING FAM', 'SINGLE FAM')
 # Combining all townhomes up to quadplexes
-df['Building Type'] = df['Building Type'].replace('RESD TRIPLEX', 'PLEX').replace(
+df['Building Type Custom'] = df['Building Type'].replace('RESD TRIPLEX', 'PLEX').replace(
     'RESD QUADPLX', 'PLEX').replace('R1 DUPLEX', 'PLEX').replace('RES DUPLEX', 'PLEX')
 # Combining "third places"
-df['Building Type'] = df['Building Type'].replace(
+df['Building Type Custom'] = df['Building Type'].replace(
     'LODGE/FRAT\'L', 'THIRD').replace('CHURCH', 'THIRD')
 # Combining commercial
-df['Building Type'] = df['Building Type'].replace('HEALTH CLUB', 'COMM').replace('GROCERY/SMKT', 'COMM').replace(
+df['Building Type Custom'] = df['Building Type'].replace('HEALTH CLUB', 'COMM').replace('GROCERY/SMKT', 'COMM').replace(
     'RETAIL/SHPG', 'COMM').replace('DAYCARE', 'COMM').replace('MARKET', 'COMM').replace('REST/BAR', 'COMM')
-df['Building Type'] = df['Building Type'].replace('OFFICE', 'COMM').replace('WAREHOUSE', 'COMM')
+df['Building Type Custom'] = df['Building Type'].replace(
+    'OFFICE', 'COMM').replace('WAREHOUSE', 'COMM')
