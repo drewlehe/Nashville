@@ -6,7 +6,8 @@ if __name__ == '__main__':
 
     result = []
     for lot in range(1, 270000):
-        infile = "/Users/alehe/OneDrive/Documents/Jupyter/SharpestMinds/Parcels/parcel{}".format(lot)
+        infile = "/Users/alehe/OneDrive/Documents/Jupyter/SharpestMinds/Parcels/parcel{}".format(
+            lot)
         with open(infile, 'r') as infile:
             try:
                 result.append(json.load(infile))
@@ -19,6 +20,6 @@ if __name__ == '__main__':
 
     xdf = pd.read_csv('/Users/alehe/OneDrive/Documents/Jupyter/SharpestMinds/sales.csv')
 
-    jdf = df.merge(xdf, right_on='Parcel ID', left_on='Map & Parcel')
+    jdf = df.merge(xdf, right_on='Parcel ID', left_on='Map & Parcel', how='left')
 
     jdf.to_csv('merged.csv')
