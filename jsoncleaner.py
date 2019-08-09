@@ -30,7 +30,11 @@ if __name__ == '__main__':
     # Neighborhood column is all numbers, but it's categorical.
     df.Neighborhood = df.Neighborhood.map(lambda x: str(x))
 
-    # Need to convert this to numeric. Split-level = 1.5, 1.75 story= 1.5
+    # Need to convert this to numeric.
+    df['Story Height'] = df['Story Height'].astype(str).map(lambda x: x.replace(
+    'STY', '').replace('STORY', '').replace(' ', '').replace('TWO', '2').replace('ONE', '1'))
+    df['Story Height'] = df['Story Height'].map(lambda x: x.replace(
+        'THREE', '3').replace('SPLIT-LEVEL', '1.5').replace('BI-LEVEL', '2'))
     df['Story Height Custom'] = df['Story Height'].astype(str).map(lambda x: x.replace(
         'STY', '').replace('STORY', '').replace(' ', '').replace('TWO', '2').replace('ONE', '1'))
     df['Story Height Custom'] = df['Story Height Custom'].map(lambda x: x.replace(
