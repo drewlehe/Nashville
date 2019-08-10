@@ -6,7 +6,7 @@ import numpy as np
 if __name__ == '__main__':
 
     result = []
-    for lot in range(180000, 270000):
+    for lot in range(1, 270000):
         infile = "/Users/alehe/Desktop/Nashville/Parcels/parcel{}".format(
             lot)
         with open(infile, 'r') as infile:
