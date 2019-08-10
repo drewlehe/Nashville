@@ -53,3 +53,5 @@ if __name__ == '__main__':
                 'LODGE/FRAT\'L': 'THIRD', 'CHURCH': 'THIRD', 'HEALTH CLUB': 'COMM', 'GROCERY/SMKT': 'COMM', 'RETAIL/SHPG': 'COMM',
                 'DAYCARE': 'COMM', 'MARKET': 'COMM', 'REST/BAR': 'COMM', 'OFFICE': 'COMM', 'WAREHOUSE': 'COMM'}
     df['Building Type Custom'] = df['Building Type'].replace(typedict)
+    
+    print(df.head())
