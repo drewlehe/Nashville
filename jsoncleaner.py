@@ -1,3 +1,5 @@
+'''File for cleaning up the DataFrame comprised of the json files downloaded from the webscraper.'''
+
 import json
 import pandas as pd
 import numpy as np
@@ -31,30 +33,23 @@ if __name__ == '__main__':
     df.Neighborhood = df.Neighborhood.map(lambda x: str(x))
 
     # Need to convert this to numeric.
-    df['Story Height'] = df['Story Height'].astype(str).map(lambda x: x.replace(
-    'STY', '').replace('STORY', '').replace(' ', '').replace('TWO', '2').replace('ONE', '1'))
-    df['Story Height'] = df['Story Height'].map(lambda x: x.replace(
-        'THREE', '3').replace('SPLIT-LEVEL', '1.5').replace('BI-LEVEL', '2'))
-    df['Story Height Custom'] = df['Story Height'].astype(str).map(lambda x: x.replace(
-        'STY', '').replace('STORY', '').replace(' ', '').replace('TWO', '2').replace('ONE', '1'))
-    df['Story Height Custom'] = df['Story Height Custom'].map(lambda x: x.replace(
-        'THREE', '3').replace('SPLIT-LEVEL', '1.5').replace('BI-LEVEL', '2')).replace('1.75', '1.5')
-    df['Story Height Custom'] = df['Story Height Custom'].map(lambda x: float(x))
 
-    # All apartments and multifamily I am listing as "condo"
-    df['Building Type Custom'] = df['Building Type'].replace('HIGHRISE APT', 'CONDO').replace(
-        'APARTMENT', 'CONDO').replace('HRISE CONDO', 'CONDO').replace('RESD CONDO', 'CONDO')
-    # Combining single-family residential
-    df['Building Type Custom'] = df['Building Type'].replace('RW SING FAM', 'SINGLE FAM').replace('RZ SING FAM', 'SINGLE FAM').replace(
-        'RH SING FAM', 'SINGLE FAM').replace('RY SING FAM', 'SINGLE FAM').replace('MODULAR HOME', 'SINGLE FAM').replace('SING FAM', 'SINGLE FAM')
-    # Combining all townhomes up to quadplexes
-    df['Building Type Custom'] = df['Building Type'].replace('RESD TRIPLEX', 'PLEX').replace(
-        'RESD QUADPLX', 'PLEX').replace('R1 DUPLEX', 'PLEX').replace('RES DUPLEX', 'PLEX')
-    # Combining "third places"
-    df['Building Type Custom'] = df['Building Type'].replace(
-        'LODGE/FRAT\'L', 'THIRD').replace('CHURCH', 'THIRD')
-    # Combining commercial
-    df['Building Type Custom'] = df['Building Type'].replace('HEALTH CLUB', 'COMM').replace('GROCERY/SMKT', 'COMM').replace(
-        'RETAIL/SHPG', 'COMM').replace('DAYCARE', 'COMM').replace('MARKET', 'COMM').replace('REST/BAR', 'COMM')
-    df['Building Type Custom'] = df['Building Type'].replace(
-        'OFFICE', 'COMM').replace('WAREHOUSE', 'COMM')
+    customdict = {'ONE': 1, 'ONE STY': 1, '1 STY': 1, '1.25 STY': 1.5, '1.5 STORY': 1.5, '1.75 STY': 1.5, 'TWO': 2, 'TWO STY': 2,
+                  '2 STY': 2, '2.25 STY': 2.5, '2.75 STY': 2.5, '2.5 STORY': 2.5, 'THREE': 3, '3 STY': 3, 'THREE STY': 3,
+                  '4 STY': 4, '4 STORY': 4, 'SPLIT-LEVEL': 1.5, 'BI-LEVEL': 2}
+    df['Story Height Custom'] = pd.to_numeric(
+        df['Story Height'].dropna().map(lambda x: customdict[x]))
+
+    storydict = {'TWO': 2, 'ONE': 1, 'ONE STY': 1, '1 STY': 1, '1.25 STY': 1.25, '1.5 STORY': 1.5, '1.75 STY': 1.75, 'TWO STY': 2,
+                 '2 STY': 2, '2.25 STY': 2.25, '2.75 STY': 2.75, '2.5 STORY': 2.75, 'THREE': 3, '3 STY': 3, 'THREE STY': 3,
+                 '4 STY': 4, '4 STORY': 4, 'SPLIT-LEVEL': 1.5, 'BI-LEVEL': 2}
+    df['Story Height'] = pd.to_numeric(df['Story Height'].dropna().map(lambda x: storydict[x]))
+
+    # Combining similar building types.
+    typedict = {'HIGHRISE APT': 'CONDO', 'APARTMENT': 'CONDO', 'HRISE CONDO': 'CONDO', 'RESD CONDO': 'CONDO',
+                'RW SING FAM': 'SINGLE FAM',
+                'RZ SING FAM': 'SINGLE FAM', 'RH SING FAM': 'SINGLE FAM', 'RY SING FAM': 'SINGLE FAM', 'MODULAR HOME': 'SINGLE FAM',
+                'SING FAM': 'SINGLE FAM', 'RESD TRIPLEX': 'PLEX', 'RESD QUADPLX': 'PLEX', 'R1 DUPLEX': 'PLEX', 'RES DUPLEX': 'PLEX',
+                'LODGE/FRAT\'L': 'THIRD', 'CHURCH': 'THIRD', 'HEALTH CLUB': 'COMM', 'GROCERY/SMKT': 'COMM', 'RETAIL/SHPG': 'COMM',
+                'DAYCARE': 'COMM', 'MARKET': 'COMM', 'REST/BAR': 'COMM', 'OFFICE': 'COMM', 'WAREHOUSE': 'COMM'}
+    df['Building Type Custom'] = df['Building Type'].replace(typedict)

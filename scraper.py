@@ -1,4 +1,6 @@
-﻿import glob
+'''Script for downloading sales data from padctn.org'''
+
+import glob
 import pandas as pd
 from bs4 import BeautifulSoup as bs
 import urllib3

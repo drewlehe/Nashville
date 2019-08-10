@@ -1,3 +1,5 @@
+'''Script for downloading the file from each parcel's property card on padctn.org'''
+
 import pandas as pd
 from bs4 import BeautifulSoup as bs
 import urllib3
@@ -7,7 +9,7 @@ import sys
 
 if __name__ == '__main__':
 
-    headers = {
+    HEADERS = {
         'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36'}
 
     mainlst = []
@@ -15,7 +17,7 @@ if __name__ == '__main__':
     def get_card_info(online_id):
         address = "http://www.padctn.org/prc/property/{}/print".format(lot)
         nulist = []
-        card = requests.get(address, headers=headers)
+        card = requests.get(address, headers = HEADERS)
         cardsoup = bs(card.text, 'html.parser')
         results = cardsoup.find_all('ul', class_='att')
         subsoup = [lst.text for result in results for lst in result.find_all('li')]
