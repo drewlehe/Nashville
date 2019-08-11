@@ -49,13 +49,19 @@ def heightizer(df_old):
 
     df['Story Height'] = pd.to_numeric(df['Story Height'].map(
         lambda x: STORYDICT[x] if x is not None else None))
+    return df
 
+
+def typizer(df_old):
+    '''Combining similar building types'''
+    df = df_old.copy()
+    df['Building Type Custom'] = df['Building Type'].replace(TYPEDICT)
     return df
 
 
 def columnizer(df_old):
     '''Cleaning up date columns, converting other columns to numeric'''
-
+    df = typizer(df_old)
     df = monetarycol(df_old)
     df = heightizer(df_old)
     # Cleaning up certain date columns
@@ -66,11 +72,6 @@ def columnizer(df_old):
         ' ', '').replace('Acres', '')).map(lambda x: float(x))
     # Neighborhood column is all numbers, but it's categorical.
     df['Neighborhood'] = df['Neighborhood'].map(lambda x: str(x))
-    # Need to convert this to numeric.
-
-    # Combining similar building types.
-
-    df['Building Type Custom'] = df['Building Type'].replace(typedict)
     return df
 
 
