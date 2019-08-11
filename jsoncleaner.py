@@ -62,8 +62,8 @@ def typizer(df_old):
 def columnizer(df_old):
     '''Cleaning up date columns, converting other columns to numeric'''
     df = typizer(df_old)
-    df = monetarycol(df_old)
-    df = heightizer(df_old)
+    df = monetarycol(df)
+    df = heightizer(df)
     # Cleaning up certain date columns
     df['Most Recent Sale Date'] = pd.to_datetime(df['Most Recent Sale Date'])
     df['Sale Date'] = pd.to_datetime(df['Sale Date'])
