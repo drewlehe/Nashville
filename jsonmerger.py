@@ -2,6 +2,7 @@
 import json
 import pandas as pd
 import numpy as np
+import jsoncleaner
 
 if __name__ == '__main__':
 
@@ -22,3 +23,5 @@ if __name__ == '__main__':
     jdf = df.merge(sales, right_on='Parcel ID', left_on='Map & Parcel', how='left')
 
     jdf.to_csv('mergednew.csv')
+    df = pd.read_csv('mergednew.csv')
+    df = jsoncleaner.columnizer(df)
