@@ -5,25 +5,29 @@ import pandas as pd
 import numpy as np
 import math
 
-CUSTOMDICT = {'ONE': 1, 'ONE STY': 1, '1 STY': 1, '1.25 STY': 1.5,
-              '1.5 STORY': 1.5, '1.75 STY': 1.5, 'TWO': 2, 'TWO STY': 2,
-              '2 STY': 2, '2.25 STY': 2.5, '2.75 STY': 2.5, '2.5 STORY': 2.5,
-              'THREE': 3, '3 STY': 3, 'THREE STY': 3, '4 STY': 4, '4 STORY': 4,
-              'SPLIT-LEVEL': 1.5, 'BI-LEVEL': 2, 'BSMT HOUSE': 1, '5 STY': 5, '6 STY': 6, '7 STY': 7, '8 STY': 8, '9 STY': 9, '11 STY': 11}
+STORYDICT = {'TWO': 2, 'ONE': 1, 'TWO': 2, 'THREE': 3,
+             'SPLIT-LEVEL': 1.5, 'BI-LEVEL': 2, 'BSMT HOUSE': 1}
 
-STORYDICT = {'TWO': 2, 'ONE': 1, 'ONE STY': 1, '1 STY': 1, '1.25 STY': 1.25,
-             '1.5 STORY': 1.5, '1.75 STY': 1.75, 'TWO STY': 2, '2 STY': 2,
-             '2.25 STY': 2.25, '2.75 STY': 2.75, '2.5 STORY': 2.75, 'THREE': 3,
-             '3 STY': 3, 'THREE STY': 3, '4 STY': 4, '4 STORY': 4,
-             'SPLIT-LEVEL': 1.5, 'BI-LEVEL': 2, 'BSMT HOUSE': 1, '5 STY': 5, '6 STY': 6, '7 STY': 7, '8 STY': 8, '9 STY': 9, '11 STY': 11}
-
-TYPEDICT = {'HIGHRISE APT': 'CONDO', 'APARTMENT': 'CONDO', 'HRISE CONDO': 'CONDO', 'RESD CONDO': 'CONDO',
-            'RW SING FAM': 'SINGLE FAM', 'SINGLE FAM': 'SINGLE FAM',
-            'RZ SING FAM': 'SINGLE FAM', 'RH SING FAM': 'SINGLE FAM', 'RY SING FAM': 'SINGLE FAM', 'MODULAR HOME': 'SINGLE FAM',
-            'SING FAM': 'SINGLE FAM', 'RESD TRIPLEX': 'PLEX', 'RESD QUADPLX': 'PLEX', 'R1 DUPLEX': 'PLEX', 'RES DUPLEX': 'PLEX',
-            'LODGE/FRAT\'L': 'THIRD', 'CHURCH': 'THIRD', 'HEALTH CLUB': 'COMM', 'GROCERY/SMKT': 'COMM', 'RETAIL/SHPG': 'COMM',
-            'DAYCARE': 'COMM', 'MARKET': 'COMM', 'REST/BAR': 'COMM', 'OFFICE': 'OFFICE', 'WAREHOUSE': 'INDUSTRIAL', 'EQUIP SHED': 'INDUSTRIAL', 'SERV GARAGE': 'INDUSTRIAL', 'TRUCK TERM': 'INDUSTRIAL', 'ZERO LOT': 'VACANT', 'CAR WASH': 'COMM', 'MED OFC': 'OFFICE', 'LAUNDRY': 'COMM', 'AUDITORIUM': 'THIRD', 'BANK': 'COMM', 'BOWLING': 'COMM', 'BUSINESS CTR': 'COMM', 'CINEMA': 'COMM', 'CLUB/UNION': "THIRD", "COMM GRNHSE": "INDUSTRIAL", 'WHSE RETAIL': 'COMM', 'ENG/RESEARCH': 'OFFICE', 'COUNTRY CLUB': 'THIRD', 'DEPT STORE': 'RETAIL', 'TENNIS': 'THIRD', 'WALKUP APT': 'CONDO', 'DRUG STORE': 'COMM', 'DISC STORE': 'COMM', 'ELDERLY HSG': 'CONDO', "FUNERAL HM": "THIRD", 'SALES SHOWRM': 'COMM',
-            'LUMBER': 'INDUSTRIAL', 'MANF PLANT': 'INDUSTRIAL', 'MAINT HANGER': 'INDUSTRIAL', 'MOTEL': 'COMM', 'MINI-LUBE': 'INDUSTRIAL', 'MINI-WAREHSE': 'INDUSTRIAL', 'FAST FOOD': 'COMM', 'HOTEL': 'COMM', 'NURSING HOME': 'CONDO', "PARK'G GAR": 'COMM',
+TYPEDICT = {'HIGHRISE APT': 'CONDO', 'APARTMENT': 'CONDO', 'HRISE CONDO': 'CONDO',
+            'RESD CONDO': 'CONDO', 'RW SING FAM': 'SINGLE FAM', 'SINGLE FAM': 'SINGLE FAM',
+            'RZ SING FAM': 'SINGLE FAM', 'RH SING FAM': 'SINGLE FAM',
+            'RY SING FAM': 'SINGLE FAM', 'MODULAR HOME': 'SINGLE FAM',
+            'SING FAM': 'SINGLE FAM', 'RESD TRIPLEX': 'PLEX', 'RESD QUADPLX': 'PLEX',
+            'R1 DUPLEX': 'PLEX', 'RES DUPLEX': 'PLEX', 'LODGE/FRAT\'L': 'THIRD',
+            'CHURCH': 'THIRD', 'HEALTH CLUB': 'COMM', 'GROCERY/SMKT': 'COMM',
+            'RETAIL/SHPG': 'COMM', 'DAYCARE': 'COMM', 'MARKET': 'COMM',
+            'REST/BAR': 'COMM', 'OFFICE': 'OFFICE', 'WAREHOUSE': 'INDUSTRIAL',
+            'EQUIP SHED': 'INDUSTRIAL', 'SERV GARAGE': 'INDUSTRIAL', 'TRUCK TERM': 'INDUSTRIAL',
+            'ZERO LOT': 'VACANT', 'CAR WASH': 'COMM', 'MED OFC': 'OFFICE',
+            'LAUNDRY': 'COMM', 'AUDITORIUM': 'THIRD', 'BANK': 'COMM', 'BOWLING': 'COMM',
+            'BUSINESS CTR': 'COMM', 'CINEMA': 'COMM', 'CLUB/UNION': "THIRD",
+            "COMM GRNHSE": "INDUSTRIAL", 'WHSE RETAIL': 'COMM', 'ENG/RESEARCH': 'OFFICE',
+            'COUNTRY CLUB': 'THIRD', 'DEPT STORE': 'RETAIL', 'TENNIS': 'THIRD',
+            'WALKUP APT': 'CONDO', 'DRUG STORE': 'COMM', 'DISC STORE': 'COMM',
+            'ELDERLY HSG': 'CONDO', "FUNERAL HM": "THIRD", 'SALES SHOWRM': 'COMM',
+            'LUMBER': 'INDUSTRIAL', 'MANF PLANT': 'INDUSTRIAL', 'MAINT HANGER': 'INDUSTRIAL',
+            'MOTEL': 'COMM', 'MINI-LUBE': 'INDUSTRIAL', 'MINI-WAREHSE': 'INDUSTRIAL',
+            'FAST FOOD': 'COMM', 'HOTEL': 'COMM', 'NURSING HOME': 'CONDO', "PARK'G GAR": 'COMM',
             'SERV STATION': 'COMM', 'INDOOR WP': 'COMM', 'HOSPITAL': 'THIRD'
             }
 
@@ -54,10 +58,10 @@ def heightizer(df_old):
         lambda x: str(x).replace(' STORY', '').replace(' STY', ''))
 
     df['Story Height Custom'] = pd.to_numeric(df['Story Height'].map(
-        lambda x: CUSTOMDICT[x] if not pd.isnull(x) and x in CUSTOMDICT else float(x)))
+        lambda x: CUSTOMDICT[x] if x in CUSTOMDICT else float(x)))
 
     df['Story Height'] = pd.to_numeric(df['Story Height'].map(
-        lambda x: STORYDICT[x] if not pd.isnull(x) and x in STORYDICT else float(x)))
+        lambda x: STORYDICT[x] if x in STORYDICT else float(x)))
     return df
 
 
