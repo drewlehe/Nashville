@@ -81,8 +81,8 @@ def columnizer(df_old):
     df['Land Area Acres'] = pd.to_numeric(df['Land Area'].map(lambda x: str(x).replace(
         ' ', '').replace('Acres', '').replace(',', '') if not pd.isnull(x) else None))
     # Neighborhood and Zone are all numbers, but they're categorical.
-    df['Neighborhood'] = df['Neighborhood'].map(lambda x: str(x) if x is not pd.isnull(x) else None)
-    df['Zone'] = df['Zone'].map(lambda x: str(x) if x is not pd.isnull(x) else None)
+    df['Neighborhood'] = df['Neighborhood'].map(lambda x: str(x) if not pd.isnull(x) else None)
+    df['Zone'] = df['Zone'].map(lambda x: str(x) if not pd.isnull(x) else None)
 
     return df
 
