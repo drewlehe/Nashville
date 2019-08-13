@@ -3,10 +3,9 @@
 import json
 import pandas as pd
 import numpy as np
-import math
 
 STORYDICT = {'TWO': 2, 'ONE': 1, 'TWO': 2, 'THREE': 3,
-             'SPLIT-LEVEL': 1.5, 'BI-LEVEL': 2, 'BSMT HOUSE': 1}
+             'SPLIT-LEVEL': 1.5, 'BI-LEVEL': 2, 'BSMT HOUSE': 1, '':''}
 
 TYPEDICT = {'HIGHRISE APT': 'CONDO', 'APARTMENT': 'CONDO', 'HRISE CONDO': 'CONDO',
             'RESD CONDO': 'CONDO', 'RW SING FAM': 'SINGLE FAM', 'SINGLE FAM': 'SINGLE FAM',
@@ -34,7 +33,7 @@ TYPEDICT = {'HIGHRISE APT': 'CONDO', 'APARTMENT': 'CONDO', 'HRISE CONDO': 'CONDO
 
 def dolcomma(col):
     '''Cleans up monetary column and converts to numeric'''
-    return pd.to_numeric(col.map(lambda x: str(x).replace(',', '').replace('$', '').replace('USD', '')))
+    return pd.to_numeric(col.map(lambda x: str(x).replace(',', '').replace('$', '').replace('USD', '') if pd.notnull(x) else None))
 
 
 def monetarycol(df):
@@ -46,6 +45,7 @@ def monetarycol(df):
     df['Land Value Improved'] = dolcomma(df['Land Value'])
     df['Assessment Land Improved'] = dolcomma(df['Assessment Land'])
     df['Total Appraisal Value Improved'] = dolcomma(df['Total Appraisal Value'])
+    df['Square Footage Improved'] = dolcomma(df['Square Footage'])
     return df
 
 
@@ -54,10 +54,11 @@ def heightizer(df_old):
     df = df_old.copy()
 
     df['Story Height'] = df['Story Height'].map(
-        lambda x: str(x).replace(' STORY', '').replace(' STY', ''))
+        lambda x: str(x).replace(' STORY', '').replace(' STY', '') if (x != '' and not pd.isnull(x)) else x)
     print(df['Story Height'].value_counts())
-    df['Story Height'] = pd.to_numeric(df['Story Height'].map(
-        lambda x: STORYDICT[x] if x in STORYDICT else x))
+    df['Story Height'] = pd.to_numeric(df['Story Height'], errors='ignore')
+    df['Story Height'] = df['Story Height'].map(
+        lambda x: STORYDICT[x] if x in STORYDICT else x)
     return df
 
 
@@ -65,7 +66,7 @@ def typizer(df_old):
     '''Combining similar building types'''
     df = df_old.copy()
     df['Building Type Custom'] = df['Building Type'].map(
-        lambda x: TYPEDICT[x] if (x != '' and pd.notnull(x)) else None)
+        lambda x: TYPEDICT[x] if (x != '' and not pd.isnull(x) and not None) else None)
     return df
 
 
@@ -75,13 +76,13 @@ def columnizer(df_old):
     df = typizer(df)
     df = heightizer(df)
     # Cleaning up certain date columns
-    df['Most Recent Sale Date'] = pd.to_datetime(df['Most Recent Sale Date'], errors='ignore')
-    df['Sale Date'] = pd.to_datetime(df['Sale Date'], errors='ignore')
+    df['Most Recent Sale Date'] = pd.to_datetime(df['Most Recent Sale Date'])
+    df['Sale Date'] = pd.to_datetime(df['Sale Date'])
     # Converting 'Land Area' column to clean float
     df['Land Area Acres'] = pd.to_numeric(df['Land Area'].map(lambda x: str(x).replace(
-        ' ', '').replace('Acres', '').replace(',', '') if not pd.isnull(x) else None))
+        ' ', '').replace('Acres', '').replace(',', '') if pd.notnull(x) else None))
     # Neighborhood and Zone are all numbers, but they're categorical.
-    df['Neighborhood'] = df['Neighborhood'].map(lambda x: str(x) if not pd.isnull(x) else None)
-    df['Zone'] = df['Zone'].map(lambda x: str(x) if not pd.isnull(x) else None)
+    df['Neighborhood'] = df['Neighborhood'].map(lambda x: str(x) if pd.notnull(x) else None)
+    df['Zone'] = df['Zone'].map(lambda x: str(x) if pd.notnull(x) else None)
 
     return df
