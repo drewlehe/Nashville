@@ -34,14 +34,13 @@ TYPEDICT = {'HIGHRISE APT': 'CONDO', 'APARTMENT': 'CONDO', 'HRISE CONDO': 'CONDO
 
 def dolcomma(col):
     '''Cleans up monetary column and converts to numeric'''
-    return pd.to_numeric(col.map(lambda x: str(x).replace(',', '').replace('$', '').replace('USD', '')), errors='coerce')
+    return pd.to_numeric(col.map(lambda x: str(x).replace(',', '').replace('$', '').replace('USD', '')))
 
 
 def monetarycol(df):
     '''Applies dolcomma to json columns and converts to integer'''
     df['Assessment Improvement Improved'] = dolcomma(df['Assessment Land'])
     df['Most Recent Sale Price Improved'] = dolcomma(df['Most Recent Sale Price'])
-    df['Square Footage Improved'] = dolcomma(df['Square Footage'])
     df['Improvement Value Improved'] = dolcomma(df['Improvement Value'])
     df['Assessment Total Improved'] = dolcomma(df['Assessment Total'])
     df['Land Value Improved'] = dolcomma(df['Land Value'])
@@ -56,9 +55,6 @@ def heightizer(df_old):
 
     df['Story Height'] = df['Story Height'].map(
         lambda x: str(x).replace(' STORY', '').replace(' STY', ''))
-
-    df['Story Height Custom'] = pd.to_numeric(df['Story Height'].map(
-        lambda x: CUSTOMDICT[x] if x in CUSTOMDICT else float(x)))
 
     df['Story Height'] = pd.to_numeric(df['Story Height'].map(
         lambda x: STORYDICT[x] if x in STORYDICT else float(x)))
@@ -89,10 +85,3 @@ def columnizer(df_old):
     df['Zone'] = df['Zone'].map(lambda x: str(x) if not pd.isnull(x) else None)
 
     return df
-
-
-if __name__ == '__main__':
-
-    df = pd.read_csv('mergednew.csv', index_col=None)
-
-    print(df.head())
