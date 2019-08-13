@@ -3,8 +3,12 @@ import json
 import pandas as pd
 import numpy as np
 import jsoncleaner
+import datetime as dt
+
 
 if __name__ == '__main__':
+
+    today = str(dt.datetime.today().strftime('%Y%m%d%H%M%S'))
 
     result = []
     for lot in range(1, 270000):
@@ -22,6 +26,6 @@ if __name__ == '__main__':
 
     jdf = df.merge(sales, right_on='Parcel ID', left_on='Map & Parcel', how='left')
 
-    jdf.to_csv('mergednew.csv')
-    df = pd.read_csv('mergednew.csv')
-    df = jsoncleaner.columnizer(df)
+    jdf = jsoncleaner.columnizer(jdf)
+
+    jdf.to_csv('nashville_{}.csv'.format(today))

@@ -55,9 +55,9 @@ def heightizer(df_old):
 
     df['Story Height'] = df['Story Height'].map(
         lambda x: str(x).replace(' STORY', '').replace(' STY', ''))
-
+    print(df['Story Height'].value_counts())
     df['Story Height'] = pd.to_numeric(df['Story Height'].map(
-        lambda x: STORYDICT[x] if x in STORYDICT else float(x)))
+        lambda x: STORYDICT[x] if x in STORYDICT else x))
     return df
 
 
@@ -65,7 +65,7 @@ def typizer(df_old):
     '''Combining similar building types'''
     df = df_old.copy()
     df['Building Type Custom'] = df['Building Type'].map(
-        lambda x: TYPEDICT[x] if not pd.isnull(x) else None)
+        lambda x: TYPEDICT[x] if (x != '' and pd.notnull(x)) else None)
     return df
 
 
