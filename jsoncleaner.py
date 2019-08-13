@@ -66,9 +66,8 @@ def typizer(df_old):
     '''Combining similar building types'''
     df = df_old.copy()
     df['Building Type Custom'] = df['Building Type'].map(
-        lambda x: TYPEDICT[x] if (x != '' and not pd.isnull(x) and not None) else None)
+        lambda x: TYPEDICT[x] if (x != '' and not pd.isnull(x)) else None)
     return df
-
 
 def columnizer(df_old):
     '''Cleaning up date columns, converting other columns to numeric'''
