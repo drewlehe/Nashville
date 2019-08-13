@@ -11,7 +11,7 @@ if __name__ == '__main__':
     today = str(dt.datetime.today().strftime('%Y%m%d%H%M%S'))
 
     result = []
-    for lot in range(1, 270000):
+    for lot in range(1, 270001):
         infile = "/Users/alehe/Desktop/Nashville/Parcels/parcel{}".format(
             lot)
         with open(infile, 'r') as infile:
