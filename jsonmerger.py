@@ -1,10 +1,11 @@
 """Script for joining scraped web data with sales data into a dataframe"""
+
 import json
 import pandas as pd
 import numpy as np
 import jsoncleaner
 import datetime as dt
-
+import zipcoder
 
 if __name__ == '__main__':
 
@@ -25,7 +26,7 @@ if __name__ == '__main__':
     sales = pd.read_csv('/Users/alehe/OneDrive/Documents/Jupyter/SharpestMinds/sales.csv')
 
     jdf = df.merge(sales, right_on='Parcel ID', left_on='Map & Parcel', how='left')
-
     jdf = jsoncleaner.columnizer(jdf)
+    jdf= zipcoder.zipper(jdf)
 
-    jdf.to_csv('nashville_{}.csv'.format(today))
+    jdf.to_csv('nashville_{}.csv'.format(today), index=False)
