@@ -5,7 +5,6 @@ import pandas as pd
 import numpy as np
 import jsoncleaner
 import datetime as dt
-import zipcoder
 
 if __name__ == '__main__':
 
@@ -27,6 +26,5 @@ if __name__ == '__main__':
 
     jdf = df.merge(sales, right_on='Parcel ID', left_on='Map & Parcel', how='left')
     jdf = jsoncleaner.columnizer(jdf)
-    jdf= zipcoder.zipper(jdf)
 
     jdf.to_csv('nashville_{}.csv'.format(today), index=False)
