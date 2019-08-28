@@ -25,8 +25,10 @@ def get_card_info(online_id):
         else:
             values.append(string.split(':')[1].strip())
             keys.append(string.split(':')[0].strip())
-    websters = dict(zip(keys, values))
-    with open('Parcels/parcel{}'.format(lot), 'w') as file:
+    edited = [v + str(keys[:i].count(v) + 1) if keys.count(v) > 1 else v for i, v in enumerate(keys)]
+    final = [v[:-1] if v[-1]=='1' else v for v in edited]
+    websters = dict(zip(final, values))
+    with open('ParcelsNew/parcel{}'.format(lot), 'w') as file:
         json.dump(websters, file)
 
 
