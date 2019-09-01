@@ -30,6 +30,7 @@ def get_history(page):
             amounts.append(str(item.text))
     if dates:
         websters = dict(zip(dates, amounts))
+        websters['Map & Parcel'] = mapid
     else:
         websters = {}
         websters['Map & Parcel'] = mapid
