@@ -35,8 +35,6 @@ TYPEDICT = {'HIGHRISE APT': 'CONDO', 'APARTMENT': 'CONDO', 'HRISE CONDO': 'CONDO
             'SERV STATION': 'COMM', 'INDOOR WP': 'COMM', 'HOSPITAL': 'THIRD', 'T-HANGER': 'INDUSTRIAL'
             }
 
-gmaps = googlemaps.Client(key=API_KEY)
-
 COLS = ['Assessment Classification*', 'Assessment Improvement',
        'Assessment Land', 'Assessment Total', 'Assessment Year', 'Baths', 'Baths2'
        'Beds','Beds2', 'Building Condition','Building Condition2', 'Building Grade','Building Grade2', 'Building Type',
