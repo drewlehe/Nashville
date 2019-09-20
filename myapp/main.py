@@ -1,19 +1,14 @@
 import bokeh
 from bokeh.layouts import column, widgetbox
 from bokeh.models.widgets import Button, Paragraph, Dropdown, Slider, TextInput, CheckboxButtonGroup, Select, RadioButtonGroup, RadioGroup
-from os.path import dirname, join
-from bokeh.plotting import curdoc, show, output_file, figure
+from bokeh.plotting import curdoc, show, figure
 from bokeh.embed import file_html, components
 import json
-from bokeh.resources import CDN
 import pps_regressor
 
-
-
 def update_data(event):
-#     print(f'{event}')
     bldg_data = {
-        'Neighborhood': str(nbhd.value_input),
+        'Neighborhood': str(float(nbhd.value_input)),
         'Building-Type-Custom': density.active,
         'Fixtures': fixtures.value,
         'Year Built': int(yearbuilt.value_input),
@@ -26,8 +21,6 @@ def update_data(event):
     price_pred = pps_regressor.prediction(bldg_data)
     p.text = '$' + str(price_pred[0] * bldg_data['Square Footage'])
 
-
-    
 # Create some widgets
 nbhd = TextInput(placeholder="4-digit #", title="Neighborhood Code:")
 densities = {"Single-Family":"SINGLE FAM", "Plex": "PLEX", "Mid-Rise": "CONDO", "High-Rise": "HRISE CONDO"}
@@ -41,7 +34,7 @@ segment = RadioButtonGroup(
         labels=["Affordable", "Mid-Range", "High-End", "Luxury"])
 quarters = [("One", 1), ("Two", 2), ("Three", 3), ("Four", 4)]
 quarter = RadioGroup(labels = ['First', 'Second', 'Third', 'Fourth'])
-fixtures = Slider(start=3, end=20, value=3, step=1, title="Water Fixtures")
+fixtures = Slider(start=3, end=20, value = 4, step=1, title="Water Fixtures")
 calculate = Button(label="Get Price", button_type="success")
 calculate.on_click(update_data)
 # p = Paragraph(text="{}".format(price_pred * bldg_data['Square Footage']))

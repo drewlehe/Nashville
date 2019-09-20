@@ -10,6 +10,7 @@ def prediction(input_dict):
     model = lgb.Booster(model_file='pps-model.txt')
     lst = [(input_dict)]
     tester = pd.DataFrame(lst)
+    print(tester)
     tester['Log-Built'] = np.log(tester['Year Built'])
     tester['Log-Fixtures'] = np.log(int(tester['Fixtures']))
     tester['Log-SqFt'] = np.log(int(tester['Square Footage']))
@@ -20,7 +21,7 @@ def prediction(input_dict):
     meanpps.index=meanpps.index.astype(float)
     nbhds = list(meanpps.index)
     tester=pd.merge(how = 'left', left = tester, right = meanpps,left_on="Neighborhood", right_index=True)
-    tester['Log-NbhdPPS'] = np.log(tester['Neighborhood'])
+    tester['Log-NbhdPPS'] = np.log(tester['NeighborhoodPPS'])
     tester['Neighborhood'] = str(tester['Neighborhood'])
     tester['Building-Grade'] = tester['Building-Grade'].map(lambda x: SEGMENTS[x])
     tester['Building-Type-Custom'] = tester['Building-Type-Custom'].map(lambda x: DENSITIES[x])
