@@ -13,7 +13,7 @@ def correct(df_old):
     df.loc[239278, 'Sale Price'] = 280395
     df.loc[138891, 'Sale Price'] = 200000
     df.loc[241961, 'Sale Date'] = '2019-03-04'
-    df.loc[241961, 'Sale Date'] = pd.to_datetime(df1.loc[241961, 'Sale Date'])
+    df.loc[241961, 'Sale Date'] = pd.to_datetime(df.loc[241961, 'Sale Date'])
     df.loc[241961, 'Sale Price'] = 370000
     df.loc[230115, 'Sale Price'] = 325000
     df.loc[53151, 'Sale Price'] = 310900
