@@ -9,10 +9,9 @@ from bokeh.resources import CDN
 import pps_regressor
 
 
-json_out = 'selection.json'
 
 def update_data(event):
-    print(f'{event}')
+#     print(f'{event}')
     bldg_data = {
         'Neighborhood': str(nbhd.value_input),
         'Building-Type-Custom': density.active,
@@ -23,9 +22,8 @@ def update_data(event):
         'Renovation': reno_new.active,
         'Quarter': quarter.active,
         'Year': 2019}
-    with open(json_out, 'w') as out:
-        json.dump(bldg_data, out)
-    price_pred = pps_regressor.prediction(json_out)
+    
+    price_pred = pps_regressor.prediction(bldg_data)
     p.text = '$' + str(price_pred[0] * bldg_data['Square Footage'])
 
 

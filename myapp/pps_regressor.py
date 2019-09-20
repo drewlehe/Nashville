@@ -6,11 +6,9 @@ import json
 DENSITIES = {0:"SINGLE FAM", 1: "PLEX", 2: "CONDO", 3: "HRISE CONDO"}
 SEGMENTS = {0: 'C', 1: 'B', 2: 'A', 3:'X'}
 
-def prediction(input_json):
+def prediction(input_dict):
     model = lgb.Booster(model_file='pps-model.txt')
-    with open('selection.json') as testfile:
-        bokeh_dict = json.load(testfile)
-    lst = [dict(bokeh_dict)]
+    lst = [(input_dict)]
     tester = pd.DataFrame(lst)
     tester['Log-Built'] = np.log(tester['Year Built'])
     tester['Log-Fixtures'] = np.log(int(tester['Fixtures']))
