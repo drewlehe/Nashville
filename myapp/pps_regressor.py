@@ -7,7 +7,7 @@ DENSITIES = {0:"SINGLE FAM", 1: "PLEX", 2: "CONDO", 3: "HRISE CONDO"}
 SEGMENTS = {0: 'C', 1: 'B', 2: 'A', 3:'X'}
 
 def prediction(input_dict):
-    model = lgb.Booster(model_file='pps-model.txt')
+    model = lgb.Booster(model_file='noyear.txt')
     lst = [(input_dict)]
     tester = pd.DataFrame(lst)
     print(tester)
