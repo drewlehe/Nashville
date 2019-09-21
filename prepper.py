@@ -62,7 +62,7 @@ def transform(df_old):
     return df
 
 def prep(df_old):
-    df = pd.read_csv('{}'.format(df_old),index_col=0, parse_dates = ['Most Recent Sale Date', 'Sale Date'], dtype={'Zone': str, 'Neighborhood': str})
+    df = pd.read_csv('{}'.format(df_old),index_col=0,low_memory=False, parse_dates = ['Most Recent Sale Date', 'Sale Date'], dtype={'Zone': str, 'Neighborhood': str})
     df = correct(df)
     df = clean(df)
     df = transform(df)
