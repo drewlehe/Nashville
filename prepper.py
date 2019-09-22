@@ -5,8 +5,8 @@ import pandas as pd
 import sys
 
 def correct(df_old):
+    '''Correcting incorrectly-entered data'''
     df=df_old.copy()
-    #Correcting badly-entered data
     df.loc[176025, 'Sale Price'] = 37000
     df.loc[27056, 'Sale Price'] = 161000
     df.loc[191004, 'Sale Price'] = 810000
@@ -25,6 +25,7 @@ def correct(df_old):
     return df
 
 def clean(df_old):
+    '''Drop redundant rows, dirty data, create some new transformed columns'''
     #Creating new dataframe without duplicate entires
     df=df_old.sort_values(by='Sale Date').drop_duplicates(subset='Map & Parcel', keep = 'last')
     #Dropping parcels that were involved in multi-parcel sales
@@ -42,7 +43,6 @@ def clean(df_old):
     df['Quarter'] = df['Sale Date'].dt.quarter
     df['Year'] = df['Sale Date'].dt.year
     df.Quarter= df.Quarter.map(lambda x: str(x) if pd.notnull(x) else '')
-    #df.Year= df.Year.map(lambda x: str(x) if pd.notnull(x) else '')
     df['Building Grade']= df['Building Grade'].str.replace(r'\w\w\w', '').dropna()
     return df
 
@@ -62,6 +62,7 @@ def transform(df_old):
     return df
 
 def prep(df_old):
+    '''Combine all previous functions to the DataFrame and return it cleaned-up'''
     df = pd.read_csv('{}'.format(df_old),index_col=0,low_memory=False, parse_dates = ['Most Recent Sale Date', 'Sale Date'], dtype={'Zone': str, 'Neighborhood': str})
     df = correct(df)
     df = clean(df)
