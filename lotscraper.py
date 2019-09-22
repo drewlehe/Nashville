@@ -31,7 +31,7 @@ def get_card_info(online_id):
     with open('Parcels/parcel{}'.format(lot), 'w') as file:
         json.dump(websters, file)
 
-def get_history(page):
+def get_history(online_id):
     #Scrape the historical sales data for each property, then store it in Historicals folder
     address = "http://www.padctn.org/prc/property/{}/card/1/historical".format(lot)
     card = requests.get(address, headers=HEADERS)
