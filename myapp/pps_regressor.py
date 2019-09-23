@@ -1,12 +1,14 @@
+'''Contains the function to predict the price of the house, given the selected values in the widget.'''
 import numpy as np
 import pandas as pd 
 import lightgbm as lgb
 import json
 
-DENSITIES = {0:"SINGLE FAM", 1: "PLEX", 2: "CONDO", 3: "HRISE CONDO"}
+DENSITIES = {0:"SINGLE FAM", 1: "PLEX"}
 SEGMENTS = {0: 'D', 1: 'C', 2: 'B'}
 
 def prediction(input_dict):
+    '''Take in the bldg_data dictionary as a json, transform the features and give a price prediction'''
     model = lgb.Booster(model_file='noyear.txt')
     lst = [(input_dict)]
     tester = pd.DataFrame(lst)
