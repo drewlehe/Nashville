@@ -25,13 +25,16 @@ def prediction(input_dict):
     tester['Neighborhood'] = str(tester['Neighborhood'])
     tester['Building-Grade'] = tester['Building-Grade'].map(lambda x: SEGMENTS[x])
     tester['Building-Type-Custom'] = tester['Building-Type-Custom'].map(lambda x: DENSITIES[x])
-    X = pd.get_dummies(tester[['Year', 'Log-Built', 'Neighborhood',  'Building-Type-Custom', 
+    ML = tester[['Year', 'Log-Built', 'Neighborhood',  'Building-Type-Custom', 
                                'Quarter', 'Building-Grade', 'Log-SqFt',
-                               'Log-NbhdPPS']])
+                               'Log-NbhdPPS']]
     with open(f'ml_vars.json', 'r') as file:
         ml_vars = json.load(file)
     data = pd.DataFrame(columns=ml_vars)
-    data= data.append(X, sort=True)
-    X = pd.get_dummies(data)
-    price_pred = model.predict(X)
+    data= pd.concat([ML, data])
+    print(data.columns)
+    X = pd.get_dummies(data, columns=data.columns, dtype=bool)
+#     X.columns = data.columns
+#     print(X[:20])
+    price_pred = model.predict(data)
     return price_pred
