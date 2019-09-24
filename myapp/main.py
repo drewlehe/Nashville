@@ -10,12 +10,12 @@ import pandas as pd
 with open('meanpps.json', 'r') as nbhdpps:
         nbhd_dict = json.load(nbhdpps)
 meanpps = pd.DataFrame(nbhd_dict, index=None)
-hoods = list(str(int(meanpps.index)))
+hoods = list(meanpps.index)
 
 def update_data(event):
     '''Create a dictionary of selected values in the widget when the "Get Price" button is pressed'''
     bldg_data = {
-        'Neighborhood': str(int(nbhd.value)),
+        'Neighborhood': float(nbhd.value),
         'Building-Type-Custom': density.active,
         'Year Built': int(yearbuilt.value_input),
         'Building-Grade': segment.active,
@@ -30,20 +30,19 @@ def update_data(event):
     price_pred = pps_regressor.prediction(bldg_data)
     p.text = '$' + str(price_pred[0] * bldg_data['Square Footage'])
 
-if __name__ == '__main__':
-    # Create some widgets
-    nbhd = Select(title="Neighborhood:", options=list(hoods))
-    density = RadioButtonGroup(labels=['Single-Family', 'Multi-Family'])
-    reno_new = RadioButtonGroup(labels=["Renovation", "New Build"])
-    #If renovation, select year built of the property:
-    yearbuilt = TextInput(placeholder="4-digit #", title="Year of the original structure (if renovation):")
-    squarefootage = Slider(start=500, end=3500, value=500, step=10, title="Square Footage")
-    segment = RadioButtonGroup(labels=["Affordable", "Mid-Range", "High-End"])
-    quarter = RadioGroup(labels = ['First', 'Second', 'Third', 'Fourth'])
-    fixtures = Slider(start=3, end=20, value=3, step=1, title="Water Fixtures")
-    calculate = Button(label="Get Price", button_type="success")
-    calculate.on_click(update_data)
-    p = Paragraph(text="foobar")
-    box = widgetbox([density, nbhd, reno_new, yearbuilt, squarefootage, segment, quarter, calculate, p])
-    curdoc().add_root(box)
+# Create some widgets
+nbhd = Select(title="Neighborhood:", options=list(hoods))
+density = RadioButtonGroup(labels=['Single-Family', 'Multi-Family'])
+reno_new = RadioButtonGroup(labels=["Renovation", "New Build"])
+#If renovation, select year built of the property:
+yearbuilt = TextInput(placeholder="4-digit #", title="Year of the original structure (if renovation):")
+squarefootage = Slider(start=500, end=3500, value=500, step=10, title="Square Footage")
+segment = RadioButtonGroup(labels=["Affordable", "Mid-Range", "High-End"])
+quarter = RadioGroup(labels = ['First', 'Second', 'Third', 'Fourth'])
+fixtures = Slider(start=3, end=20, value=3, step=1, title="Water Fixtures")
+calculate = Button(label="Get Price", button_type="success")
+calculate.on_click(update_data)
+p = Paragraph(text="foobar")
+box = widgetbox([density, nbhd, reno_new, yearbuilt, squarefootage, segment, quarter, calculate, p])
+curdoc().add_root(box)
     

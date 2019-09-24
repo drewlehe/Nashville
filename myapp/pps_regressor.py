@@ -12,7 +12,6 @@ def prediction(input_dict):
     model = lgb.Booster(model_file='noyear.txt')
     lst = [(input_dict)]
     tester = pd.DataFrame(lst)
-    print(tester)
     tester['Log-Built'] = np.log(tester['Year Built'])
     tester['Log-SqFt'] = np.log(int(tester['Square Footage']))
     tester['Neighborhood'] = tester['Neighborhood'].astype(float)
@@ -29,5 +28,10 @@ def prediction(input_dict):
     X = pd.get_dummies(tester[['Year', 'Log-Built', 'Neighborhood',  'Building-Type-Custom', 
                                'Quarter', 'Building-Grade', 'Log-SqFt',
                                'Log-NbhdPPS']])
+    with open(f'ml_vars.json', 'r') as file:
+        ml_vars = json.load(file)
+    data = pd.DataFrame(columns=ml_vars)
+    data= data.append(X, sort=True)
+    X = pd.get_dummies(data)
     price_pred = model.predict(X)
     return price_pred
