@@ -6,11 +6,13 @@ import json
 
 DENSITIES = {0:"SINGLE FAM", 1: "PLEX"}
 SEGMENTS = {0: 'D', 1: 'C', 2: 'B'}
+QUARTERS = {0: '1', 1: '2', 2: '3', 3: '4'}
 
 def prediction(input_dict):
     '''Take in the bldg_data dictionary as a json, transform the features and give a price prediction'''
-    model = lgb.Booster(model_file='noyear.txt')
+    model = lgb.Booster(model_file='pps-model.txt')
     lst = [(input_dict)]
+#     print(lst)
     tester = pd.DataFrame(lst)
     tester['Log-Built'] = np.log(tester['Year Built'])
     tester['Log-SqFt'] = np.log(int(tester['Square Footage']))
@@ -25,16 +27,22 @@ def prediction(input_dict):
     tester['Neighborhood'] = str(tester['Neighborhood'])
     tester['Building-Grade'] = tester['Building-Grade'].map(lambda x: SEGMENTS[x])
     tester['Building-Type-Custom'] = tester['Building-Type-Custom'].map(lambda x: DENSITIES[x])
+    tester['Quarter'] = tester['Quarter'].map(lambda x: QUARTERS[x])
+    tester['Year']=2019
+    print(tester[:12])
     ML = tester[['Year', 'Log-Built', 'Neighborhood',  'Building-Type-Custom', 
-                               'Quarter', 'Building-Grade', 'Log-SqFt',
-                               'Log-NbhdPPS']]
+                 'Quarter', 'Building-Grade', 'Log-SqFt', 'Log-NbhdPPS']]
+#     print(ML.dtypes)
+    
     with open(f'ml_vars.json', 'r') as file:
         ml_vars = json.load(file)
     data = pd.DataFrame(columns=ml_vars)
-    data= pd.concat([ML, data])
-    print(data.columns)
-    X = pd.get_dummies(data, columns=data.columns, dtype=bool)
-#     X.columns = data.columns
-#     print(X[:20])
-    price_pred = model.predict(data)
+    data['Year']=data['Year'].astype(int)
+    data[['Log-SqFt', 'Log-NbhdPPS', 'Log-Built']] = data[['Log-SqFt', 'Log-NbhdPPS', 'Log-Built']].astype(float)
+    testdummy = pd.get_dummies(ML)
+    X=pd.concat([data,testdummy], axis=0, sort=True)
+    X.fillna(value=0, inplace=True)
+    X = X[ml_vars]
+#     print(X.columns)
+    price_pred = np.abs(model.predict(X))
     return price_pred

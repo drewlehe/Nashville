@@ -29,6 +29,7 @@ def update_data(event):
         bldg_data['Year Built'] = int(yearbuilt.value_input)
     price_pred = pps_regressor.prediction(bldg_data)
     p.text = '$' + str(price_pred[0] * bldg_data['Square Footage'])
+#     p.text = str(tester)
 
 # Create some widgets
 nbhd = Select(title="Neighborhood:", options=list(hoods))
@@ -42,7 +43,7 @@ quarter = RadioGroup(labels = ['First', 'Second', 'Third', 'Fourth'])
 fixtures = Slider(start=3, end=20, value=3, step=1, title="Water Fixtures")
 calculate = Button(label="Get Price", button_type="success")
 calculate.on_click(update_data)
-p = Paragraph(text="foobar")
+p = Paragraph(text="Price here")
 box = widgetbox([density, nbhd, reno_new, yearbuilt, squarefootage, segment, quarter, calculate, p])
 curdoc().add_root(box)
     
