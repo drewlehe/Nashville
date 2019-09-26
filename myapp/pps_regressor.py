@@ -15,7 +15,6 @@ def prediction(input_dict):
     tester = pd.DataFrame(lst)
     tester['Log-Built'] = np.log(tester['Year Built'])
     tester['Log-SqFt'] = np.log(int(tester['Square Footage']))
-    tester['Neighborhood'] = tester['Neighborhood'].astype(str)
     with open('meanpps.json', 'r') as nbhdpps:
         nbhd_dict = json.load(nbhdpps)
     meanpps = pd.DataFrame(nbhd_dict, index=None)
@@ -23,7 +22,6 @@ def prediction(input_dict):
     nbhds = [str(int(float(i))) for i in meanpps.index]
     tester=pd.merge(how = 'left', left = tester, right = meanpps, left_on="Neighborhood", right_index=True)
     tester['Log-NbhdPPS'] = np.log(tester['NeighborhoodPPS'])
-    tester['Neighborhood'] = str(tester['Neighborhood'])
     tester['Building-Grade'] = tester['Building-Grade'].map(lambda x: SEGMENTS[x])
     tester['Building-Type-Custom'] = tester['Building-Type-Custom'].map(lambda x: DENSITIES[x])
     tester['Quarter'] = tester['Quarter'].map(lambda x: QUARTERS[x])
