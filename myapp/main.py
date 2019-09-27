@@ -35,7 +35,6 @@ def update_data(event):
 nbhd = Select(title="Neighborhood:", options=hoods)
 density = RadioButtonGroup(labels=['Single-Family', 'Multi-Family'])
 reno_new = RadioButtonGroup(labels=["Renovation", "New Build"])
-#If renovation, select year built of the property:
 yearbuilt = TextInput(placeholder="4-digit #", title="Year of the original structure (if renovation):")
 squarefootage = Slider(start=500, end=3500, value=500, step=10, title="Square Footage")
 segment = RadioButtonGroup(labels=["Affordable", "Mid-Range", "High-End"])
