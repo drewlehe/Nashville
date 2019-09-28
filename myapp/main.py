@@ -28,8 +28,9 @@ def update_data(event):
         bldg_data['Year Built'] = 2019
     else:
         bldg_data['Year Built'] = int(yearbuilt.value_input)
-    price_pred = pps_regressor.prediction(bldg_data)
-    p.text = '$' + str(price_pred[0] * bldg_data['Square Footage'])
+    pps_pred = pps_regressor.prediction(bldg_data)
+    result = pps_pred[0] * bldg_data['Square Footage']
+    p.text = "${:,.2f}".format(result)
 
 # Create some widgets
 nbhd = Select(title="Neighborhood:", options=hoods)
